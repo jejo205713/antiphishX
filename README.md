@@ -134,8 +134,8 @@ Part of the **knightofNULL** project – Bringing cybersecurity tools to life.
 ** NullByte Team :
 * 1.Jejo J
 * 2.Sona Angel RA
-* 3.Pavithra  
-* 4.Devadharshan
+* 3.Pavithra P
+* 4.Devadharshan 
 * 5.Ranjith
   
 ---

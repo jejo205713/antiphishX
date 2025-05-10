@@ -10,7 +10,7 @@ AntiPhishX is a machine learning-powered tool designed to **detect malicious URL
 - 🔒 Features include:
   - SSL Certificate check
   - DNS resolution
-  - Detection of suspicious domains (e.g., `loclx.io`, tunneling services)
+  - Detection of suspicious domains (e.g., `loclx.io`, `bit.ly` tunneling services)
 - 🔄 Learns and updates with new URLs added by user
 - 🧠 Built-in training and prediction logic
 - 🌐 (Optional) Stores the dataset on the **blockchain + IPFS** for transparency and immutability

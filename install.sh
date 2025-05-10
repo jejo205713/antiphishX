@@ -68,9 +68,12 @@ read -p "🔗 Please enter the IPFS hash for the dataset: " ipfs_hash
 echo "📥 Downloading the dataset from IPFS..."
 ipfs get $ipfs_hash -o url_dataset.csv
 
-# Inform user to start IPFS daemon
-echo "🔄 Starting IPFS Daemon..."
-ipfs daemon &
+# Inform user to start IPFS daemon in the background
+echo "🔄 Starting IPFS Daemon in the background..."
+nohup ipfs daemon > ipfs.log 2>&1 &
+
+# Show progress or message about daemon running in the background
+echo "🚀 IPFS Daemon is running in the background. You can check logs using 'tail -f ipfs.log'"
 
 echo "✅ AntiPhishX setup is complete!"
 echo "To run the script, activate the virtual environment and run the Python script:"

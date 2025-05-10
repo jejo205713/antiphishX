@@ -284,7 +284,8 @@ Would you like to add it to the database? (y/n):
 
 Developed by [@jejo205713](https://github.com/jejo205713)  
 Part of the **knightofNULL** project – Bringing cybersecurity tools to life. 
-NullByte Team :
+
+** NullByte Team :
 * 1.Jejo J
 * 2.Sona Angel RA
 * 3.Pavithra  

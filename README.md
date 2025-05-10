@@ -1,6 +1,6 @@
-# 🔐 GPhishEye – Smart URL Classification & Threat Detection
+# 🔐 AntiPhishX – Smart URL Classification & Threat Detection
 
-GPhishEye is a machine learning-powered tool designed to **detect malicious URLs** based on SSL certificate presence, DNS resolution, and other smart heuristics. Built for researchers, developers, and security enthusiasts.
+AntiPhishX is a machine learning-powered tool designed to **detect malicious URLs** based on SSL certificate presence, DNS resolution, and other smart heuristics. Built for researchers, developers, and security enthusiasts.
 
 ---
 

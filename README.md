@@ -26,7 +26,7 @@ git clone https://github.com/jejo205713/antiphishX.git
 cd antiphishX
 ```
 
-### 4. Install requirements
+### 2. Install requirements
 
 ```bash
 chmod +x install.sh
@@ -35,7 +35,7 @@ chmod +x install.sh
 ./install.sh
 ```
 
-### 4. Run the CLI tool
+### 3. Run the CLI tool
 
 ```bash
 python3 antiphishX.py

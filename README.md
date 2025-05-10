@@ -26,14 +26,7 @@ git clone https://github.com/jejo205713/antiphishX.git
 cd antiphishX
 ```
 
-### 2. Set up virtual environment
-
-```bash
-python3 -m venv myenv
-source myenv/bin/activate
-```
-
-### 3. Install requirements
+### 4. Install requirements
 
 ```bash
 chmod +x install.sh

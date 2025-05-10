@@ -38,7 +38,7 @@ chmod +x install.sh
 ### 3. Run the CLI tool
 
 ```bash
-python3 antiphishX.py
+python3 antiphishx.py
 ```
 
 You will be prompted to enter a URL, and the system will classify it based on trained logic.

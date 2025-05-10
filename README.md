@@ -136,7 +136,7 @@ Part of the **knightofNULL** project – Bringing cybersecurity tools to life.
 * 2.Sona Angel RA
 * 3.Pavithra P
 * 4.Devadharshan 
-* 5.Ranjith
+* 5.Ranjith Dev M
   
 ---
 

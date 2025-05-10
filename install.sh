@@ -1,91 +1,37 @@
 #!/bin/bash
 
-# This script installs all dependencies for the AntiPhishX project
+# 🏗️  Installing AntiPhishX dependencies...
 
-echo "🏗️  Installing AntiPhishX dependencies..."
+# Step 1: Install system dependencies for building packages
+echo "✔️ Installing system dependencies..."
+sudo apt-get update -y
+sudo apt-get install -y build-essential python3-dev python3-pip python3-setuptools \
+                        libatlas-base-dev libopenblas-dev liblapack-dev gfortran \
+                        cython3
 
-# Check for IPFS installation
-if ! command -v ipfs &> /dev/null
-then
-    echo "🚨 IPFS not found. Installing IPFS..."
+# Step 2: Install or update pip and setuptool
+echo "✔️ Installing/updating pip and setuptools..."
+pip install --upgrade pip setuptools
 
-    # IPFS Installation for Linux
-    if [ "$(uname)" == "Linux" ]; then
-        echo "💻 Installing IPFS on Linux..."
-        curl -O https://dist.ipfs.io/go-ipfs/v0.14.0/go-ipfs_v0.14.0_linux-amd64.tar.gz
-        tar -xvzf go-ipfs_v0.14.0_linux-amd64.tar.gz
-        cd go-ipfs
-        sudo bash install.sh
-        cd ..
-        rm -rf go-ipfs go-ipfs_v0.14.0_linux-amd64.tar.gz
-    # IPFS Installation for macOS
-    elif [ "$(uname)" == "Darwin" ]; then
-        echo "💻 Installing IPFS on macOS..."
-        brew install ipfs
-    fi
-
-    echo "✅ IPFS installation completed."
-else
-    echo "✔️ IPFS is already installed."
-fi
-
-# Install Python 3 if not already installed
-if ! command -v python3 &> /dev/null
-then
-    echo "🚨 Python 3 not found. Installing Python 3..."
-    if [ "$(uname)" == "Linux" ]; then
-        sudo apt update
-        sudo apt install python3 python3-pip -y
-    elif [ "$(uname)" == "Darwin" ]; then
-        brew install python3
-    fi
-    echo "✅ Python 3 installed."
-else
-    echo "✔️ Python 3 is already installed."
-fi
-
-# Install virtualenv if not installed
-if ! pip3 show virtualenv &> /dev/null
-then
-    echo "🚨 virtualenv not found. Installing virtualenv..."
-    pip3 install virtualenv
-    echo "✅ virtualenv installed."
-else
-    echo "✔️ virtualenv is already installed."
-fi
-
-# Create virtual environment
+# Step 3: Create Python virtual environment
 echo "📂 Creating a Python virtual environment..."
-python3 -m venv venv
-source venv/bin/activate
+python3 -m venv myenv
+source myenv/bin/activate
 
-# Install Python dependencies from requirements.txt
+# Step 4: Install dependencies from requirements.txt
 echo "📦 Installing Python dependencies..."
-pip install -r requirements.txt
+pip install --upgrade pip
 
-# Prompt for IPFS hash and download dataset
-read -p "🔗 Please enter the IPFS hash for the dataset: " ipfs_hash
-echo "📥 Downloading the dataset from IPFS..."
-ipfs get $ipfs_hash -o url_dataset.csv
+# Install specific versions of dependencies
+echo "✔️ Installing required dependencies..."
+pip install pandas==1.5.3
+pip install scikit-learn==1.2.2
 
-# Inform user to start IPFS daemon in the background
-echo "🔄 Starting IPFS Daemon in the background..."
-nohup ipfs daemon > ipfs.log 2>&1 &
+# Optional: Install any other packages if needed
+# pip install <other-required-packages>
 
-# Show progress or message about daemon running in the background
-echo "🚀 IPFS Daemon is running in the background. You can check logs using 'tail -f ipfs.log'"
+# Verify installation
+echo "✔️ Verifying installation..."
+python -c "import pandas, sklearn; print('pandas:', pandas.__version__, 'scikit-learn:', sklearn.__version__)"
 
-echo "✅ AntiPhishX setup is complete!"
-echo "To run the script, activate the virtual environment and run the Python script:"
-echo "source venv/bin/activate"
-echo "python anitphishx.py"
-
-# Credits
-echo ""
-echo "## Credits"
-echo "NullByte Team :"
-echo "* 1. Jejo J"
-echo "* 2. Sona Angel RA"
-echo "* 3. Pavithra"
-echo "* 4. Devadharshan SS"
-echo "* 5. Ranjith"
+echo "🏗️  Installation complete!"

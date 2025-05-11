@@ -8,8 +8,6 @@ echo "🏗️  Installing AntiPhishX dependencies..."
 read -p "❓ Do you want to install and use IPFS for dataset download? (y/n): " use_ipfs
 
 if [[ "$use_ipfs" == "y" || "$use_ipfs" == "Y" ]]; then
-
-    # --- Check for IPFS installation ---
     if ! command -v ipfs &> /dev/null; then
         echo "🚨 IPFS not found. Installing IPFS..."
 
@@ -24,7 +22,7 @@ if [[ "$use_ipfs" == "y" || "$use_ipfs" == "Y" ]]; then
                 cd ..
                 rm -rf go-ipfs go-ipfs_v0.14.0_linux-amd64.tar.gz
             else
-                echo "❌ IPFS archive is corrupted or not in gzip format. Skipping IPFS installation."
+                echo "❌ IPFS archive is corrupted. Skipping IPFS installation."
                 rm -f go-ipfs_v0.14.0_linux-amd64.tar.gz
             fi
 
@@ -86,6 +84,10 @@ fi
 echo "📦 Installing Python dependencies..."
 pip install --upgrade pip
 pip install -r requirements.txt
+
+# --- Explicitly ensure scikit-learn is installed ---
+echo "🔍 Verifying scikit-learn installation..."
+pip install scikit-learn --upgrade
 
 # --- IPFS Dataset Download ---
 if [[ "$use_ipfs" == "y" || "$use_ipfs" == "Y" ]]; then

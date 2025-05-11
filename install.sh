@@ -4,29 +4,41 @@
 
 echo "🏗️  Installing AntiPhishX dependencies..."
 
-# --- Check for IPFS installation ---
-if ! command -v ipfs &> /dev/null
-then
-    echo "🚨 IPFS not found. Installing IPFS..."
+# --- Ask user if IPFS is needed ---
+read -p "❓ Do you want to install and use IPFS for dataset download? (y/n): " use_ipfs
 
-    # IPFS Installation for Linux
-    if [ "$(uname)" == "Linux" ]; then
-        echo "💻 Installing IPFS on Linux..."
-        curl -O https://dist.ipfs.io/go-ipfs/v0.14.0/go-ipfs_v0.14.0_linux-amd64.tar.gz
-        tar -xvzf go-ipfs_v0.14.0_linux-amd64.tar.gz
-        cd go-ipfs
-        sudo bash install.sh
-        cd ..
-        rm -rf go-ipfs go-ipfs_v0.14.0_linux-amd64.tar.gz
-    # IPFS Installation for macOS
-    elif [ "$(uname)" == "Darwin" ]; then
-        echo "💻 Installing IPFS on macOS..."
-        brew install ipfs
+if [[ "$use_ipfs" == "y" || "$use_ipfs" == "Y" ]]; then
+
+    # --- Check for IPFS installation ---
+    if ! command -v ipfs &> /dev/null; then
+        echo "🚨 IPFS not found. Installing IPFS..."
+
+        if [ "$(uname)" == "Linux" ]; then
+            echo "💻 Installing IPFS on Linux..."
+            curl -LO https://dist.ipfs.io/go-ipfs/v0.14.0/go-ipfs_v0.14.0_linux-amd64.tar.gz
+
+            if file go-ipfs_v0.14.0_linux-amd64.tar.gz | grep -q 'gzip compressed'; then
+                tar -xvzf go-ipfs_v0.14.0_linux-amd64.tar.gz
+                cd go-ipfs || { echo "❌ Failed to enter IPFS folder"; exit 1; }
+                sudo bash install.sh
+                cd ..
+                rm -rf go-ipfs go-ipfs_v0.14.0_linux-amd64.tar.gz
+            else
+                echo "❌ IPFS archive is corrupted or not in gzip format. Skipping IPFS installation."
+                rm -f go-ipfs_v0.14.0_linux-amd64.tar.gz
+            fi
+
+        elif [ "$(uname)" == "Darwin" ]; then
+            echo "💻 Installing IPFS on macOS..."
+            brew install ipfs
+        fi
+
+        echo "✅ IPFS installation completed."
+    else
+        echo "✔️ IPFS is already installed."
     fi
-
-    echo "✅ IPFS installation completed."
 else
-    echo "✔️ IPFS is already installed."
+    echo "⚠️ Skipping IPFS installation and dataset download."
 fi
 
 # --- Python 3 Installation ---
@@ -76,13 +88,14 @@ pip install --upgrade pip
 pip install -r requirements.txt
 
 # --- IPFS Dataset Download ---
-read -p "🔗 Please enter the IPFS hash for the dataset: " ipfs_hash
-echo "📥 Downloading the dataset from IPFS..."
-ipfs get $ipfs_hash -o url_dataset.csv
+if [[ "$use_ipfs" == "y" || "$use_ipfs" == "Y" ]]; then
+    read -p "🔗 Enter the IPFS hash for the dataset: " ipfs_hash
+    echo "📥 Downloading the dataset from IPFS..."
+    ipfs get "$ipfs_hash" -o url_dataset.csv
 
-# --- Start IPFS Daemon ---
-echo "🔄 Starting IPFS Daemon..."
-ipfs daemon &
+    echo "🔄 Starting IPFS Daemon..."
+    ipfs daemon &
+fi
 
 # --- Final Message ---
 echo "✅ AntiPhishX setup is complete!"

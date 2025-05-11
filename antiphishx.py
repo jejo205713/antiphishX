@@ -17,7 +17,6 @@ label_encoder = LabelEncoder()
 X = None
 csv_file_path = 'url_dataset.csv'
 
-
 # --- Feature Extraction ---
 def ssl_certificate_valid(url):
     try:
@@ -66,7 +65,6 @@ def preliminary_heuristic_check(url):
     else:
         return "⚠️ Likely Malicious based on heuristics"
 
-
 # --- Auto-label special URLs ---
 def auto_label_special_urls(df):
     def classify_special(url):
@@ -80,7 +78,6 @@ def auto_label_special_urls(df):
     df['label'] = df.apply(lambda row: row['auto_label'] if pd.notnull(row['auto_label']) else row['label'], axis=1)
     df.drop(columns=['auto_label'], inplace=True)
     return df
-
 
 # --- Model Training ---
 def load_and_train_model(csv_file=csv_file_path):
@@ -117,7 +114,6 @@ def load_and_train_model(csv_file=csv_file_path):
     print("Accuracy:", accuracy_score(y_test, y_pred))
     print(classification_report(y_test, y_pred, target_names=label_encoder.classes_))
 
-
 # --- Prediction ---
 def predict_url(url):
     if model is None or X is None:
@@ -133,7 +129,6 @@ def predict_url(url):
     prediction = model.predict(features_df)[0]
     return label_encoder.inverse_transform([prediction])[0]
 
-
 # --- Check & Possibly Add URL ---
 def check_url_safety(url, csv_file=csv_file_path):
     global model
@@ -141,41 +136,54 @@ def check_url_safety(url, csv_file=csv_file_path):
     if model is None:
         load_and_train_model(csv_file)
 
-    # Simulating a blockchain check
     print("\n🔗 Checking blockchain database... 🛠️")
-
     dataset = pd.read_csv(csv_file)
-    if url not in dataset['url'].values:
-        print(f"\n❓ The URL '{url}' is not found in the dataset.")
-        print(f"🔍 Heuristic assessment: {preliminary_heuristic_check(url)}")
-        user_input = input("Would you like to add it to the database? (y/n): ").strip().lower()
-        if user_input == 'y':
-            label = input("Please specify if the URL is 'Safe' or 'Malicious': ").strip().capitalize()
-            while label not in ['Safe', 'Malicious']:
-                label = input("Invalid input. Please specify 'Safe' or 'Malicious': ").strip().capitalize()
-
-            features = extract_features(url)
-            new_data = {
-                'url': url,
-                'ssl_certificate_valid': features[0],
-                'dns_lookup': features[1],
-                'label': label
-            }
-
-            dataset = pd.concat([dataset, pd.DataFrame([new_data])], ignore_index=True)
-            dataset.to_csv(csv_file, index=False)
-            print(f"✅ The URL '{url}' has been added to the dataset as '{label}'.")
-            load_and_train_model(csv_file)
+    found_in_db = url in dataset['url'].values
 
     try:
         prediction = predict_url(url)
+        heuristic = preliminary_heuristic_check(url)
+
+        print("\n========================================")
+        print("🔍 URL Analysis Report")
+        print("========================================")
+        print(f"🔗 URL                  : {url}")
+        print(f"📁 Found in Dataset     : {'✅ Yes' if found_in_db else '❌ No'}")
+
+        print(f"🧠 Heuristic Assessment : {heuristic}")
+        print("\n🧾 Final Verdict")
+        print("========================================")
         if prediction == "Safe":
-            return f"✅ The URL '{url}' is classified as: \033[92m{prediction}\033[0m ✅"
+            print("🟢   [ SAFE URL ]   🟢")
         else:
-            return f"⚠️ The URL '{url}' is classified as: \033[91m{prediction}\033[0m ⚠️"
+            print("🔴   [ MALICIOUS URL ]   🔴")
+        print("========================================")
+
+        if not found_in_db:
+            print("\n📌 Manual Entry:")
+            user_input = input("Would you like to add this URL to the dataset? (y/n): ").strip().lower()
+            if user_input == 'y':
+                label = input("Please specify if the URL is 'Safe' or 'Malicious': ").strip().capitalize()
+                while label not in ['Safe', 'Malicious']:
+                    label = input("Invalid input. Please specify 'Safe' or 'Malicious': ").strip().capitalize()
+
+                features = extract_features(url)
+                new_data = {
+                    'url': url,
+                    'ssl_certificate_valid': features[0],
+                    'dns_lookup': features[1],
+                    'label': label
+                }
+
+                dataset = pd.concat([dataset, pd.DataFrame([new_data])], ignore_index=True)
+                dataset.to_csv(csv_file, index=False)
+                print(f"✅ The URL '{url}' has been added to the dataset as '{label}'.")
+                load_and_train_model(csv_file)
+
+        return ""
+
     except Exception as e:
         return f"❌ Error: {str(e)}"
-
 
 # --- CLI Entry ---
 if __name__ == "__main__":
@@ -184,7 +192,8 @@ if __name__ == "__main__":
 
     url_to_check = input("Enter the URL to check: ")
     result = check_url_safety(url_to_check, csv_file_path)
-    print(result)
+    if result:
+        print(result)
 
 # Credits
 # NullByte Team :

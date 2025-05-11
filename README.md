@@ -100,13 +100,41 @@ If URL is unknown:
 ## 📊 Example Output
 
 ```
+(venv) jejo@ThinkPad-E14:~/git-builds/antiphishX$ python3 antiphishx.py 
+
+🌐 Connecting with Blockchain and checking database link...
+✔️ Database exists!
+
 📈 Model trained successfully! ✅
 Accuracy: 1.0
-Enter the URL to check: https://is.gd/OxCzlm
+              precision    recall  f1-score   support
 
-❓ The URL 'https://is.gd/OxCzlm' is not found in the dataset.
-Would you like to add it to the database? (y/n):
-⚠️ The URL 'https://is.gd/OxCzlm' is classified as: Malicious ⚠️
+   Malicious       1.00      1.00      1.00        11
+        Safe       1.00      1.00      1.00        11
+
+    accuracy                           1.00        22
+   macro avg       1.00      1.00      1.00        22
+weighted avg       1.00      1.00      1.00        22
+
+Enter the URL to check: http://127.0.0.1
+
+🔗 Checking blockchain database... 🛠️
+
+========================================
+🔍 URL Analysis Report
+========================================
+🔗 URL                  : http://127.0.0.1
+📁 Found in Dataset     : ❌ No
+🧠 Heuristic Assessment : ⚠️ Likely Malicious based on heuristics
+
+🧾 Final Verdict
+========================================
+🔴   [ MALICIOUS URL ]   🔴
+========================================
+
+📌 Manual Entry:
+Would you like to add this URL to the dataset? (y/n): 
+
 ```
 
 ---
